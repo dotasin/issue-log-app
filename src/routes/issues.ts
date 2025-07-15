@@ -24,9 +24,11 @@ const router = Router();
 
 // All routes require authentication
 router.use(authenticate);
-
+console.log("Authenticated user +- router");
 // Public issue routes (authenticated users can view all issues)
+console.log("getIssues");
 router.get('/', validateIssueQuery, getIssues);
+console.log("getIssues - end");
 router.get('/my-assigned', validateIssueQuery, getMyAssignedIssues);
 router.get('/my-created', validateIssueQuery, getMyCreatedIssues);
 

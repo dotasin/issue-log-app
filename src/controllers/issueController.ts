@@ -9,7 +9,7 @@ import {
   ValidationError, 
   AuthorizationError 
 } from '../utils/errorTypes';
-import { logger } from  '../utils/logger';
+import { logger } from '../utils/logger';
 import { asyncHandler } from '../middleware/errorHandler';
 
 /**
@@ -22,9 +22,9 @@ export const getIssues = asyncHandler(async (req: AuthRequest, res: Response, ne
     assignedTo,
     createdBy,
     search,
-    page = 1,
-    limit = 20
-  } = req.query as IssueQueryParams;
+    page = '1',
+    limit = '20'
+  } = req.query as any;
 
   // Build filter object
   const filter: any = {};
@@ -42,24 +42,28 @@ export const getIssues = asyncHandler(async (req: AuthRequest, res: Response, ne
     ];
   }
 
+  // Convert page and limit to numbers
+  const pageNum = parseInt(page as string, 10);
+  const limitNum = parseInt(limit as string, 10);
+
   // Get paginated results
   const [issues, total] = await (Issue as any).getPaginatedIssues(
     filter,
-    parseInt(page.toString()),
-    parseInt(limit.toString())
+    pageNum,
+    limitNum
   );
 
-  const totalPages = Math.ceil(total / parseInt(limit.toString()));
+  const totalPages = Math.ceil(total / limitNum);
 
   const response: PaginatedResponse<any> = {
     data: issues,
     pagination: {
-      page: parseInt(page.toString()),
-      limit: parseInt(limit.toString()),
+      page: pageNum,
+      limit: limitNum,
       total,
       pages: totalPages,
-      hasNext: parseInt(page.toString()) < totalPages,
-      hasPrev: parseInt(page.toString()) > 1
+      hasNext: pageNum < totalPages,
+      hasPrev: pageNum > 1
     }
   };
 

@@ -4,7 +4,7 @@ import multer, { FileFilterCallback, MulterError } from 'multer';
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs';
-import { FileUploadError } from '../utils/errorTypes';
+import { FileUploadError } from  '../utils/errorTypes';
 import { logger } from '../utils/logger';
 
 // Allowed file types

@@ -2,7 +2,7 @@
 
 A comprehensive RESTful API for issue tracking and management, built with Node.js, TypeScript, Express.js, and MongoDB. This API provides complete CRUD operations for issues, comments, file attachments, and user management with JWT-based authentication.
 
-## 🚀 Features
+## Features
 
 ### Core Functionality
 - **Issue Management**: Create, read, update, delete issues with status tracking
@@ -19,7 +19,7 @@ A comprehensive RESTful API for issue tracking and management, built with Node.j
 - **Comprehensive Logging**: Winston-based logging system
 - **Error Handling**: Centralized error handling with detailed responses
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Runtime**: Node.js with TypeScript
 - **Framework**: Express.js
@@ -30,13 +30,13 @@ A comprehensive RESTful API for issue tracking and management, built with Node.j
 - **Logging**: Winston
 - **Security**: Helmet, CORS, bcrypt
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js (v16 or higher)
 - npm or yarn
 - MongoDB Atlas account (or local MongoDB instance)
 
-## 🔧 Installation
+## Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -250,7 +250,7 @@ curl -X GET http://localhost:3000/api/issues \
 }
 ```
 
-## 🔍 Query Parameters
+## Query Parameters
 
 ### Issues
 - `page` - Page number (default: 1)
@@ -275,7 +275,7 @@ curl -X GET http://localhost:3000/api/issues \
 - **CORS**: Cross-origin resource sharing configuration
 - **Helmet**: Security headers
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -310,7 +310,7 @@ src/
 └── app.ts           # Main application file
 ```
 
-## 🧪 Testing with Postman
+## Testing with Postman
 
 A complete Postman collection is provided with:
 - Environment variables for easy configuration
@@ -321,7 +321,7 @@ A complete Postman collection is provided with:
 
 Import the collection and set the `baseUrl` to `http://localhost:3000`.
 
-## 🚨 Error Handling
+## Error Handling
 
 The API provides comprehensive error handling with:
 - Consistent error response format
@@ -342,7 +342,7 @@ The API provides comprehensive error handling with:
 }
 ```
 
-## 📝 Logging
+## Logging
 
 The application uses Winston for comprehensive logging:
 - **Console logging** for development
@@ -357,7 +357,7 @@ Log files are stored in the `logs/` directory:
 - `exceptions.log` - Uncaught exceptions
 - `rejections.log` - Unhandled promise rejections
 
-## 🔄 Data Integrity
+## Data Integrity
 
 The API maintains data integrity through:
 - **Cascade Deletes**: Automatic cleanup of related data
@@ -365,7 +365,7 @@ The API maintains data integrity through:
 - **File Cleanup**: Removes orphaned files from disk
 - **Transaction Safety**: Atomic operations where needed
 
-## 🚀 Production Deployment
+## Production Deployment
 
 For production deployment:
 
@@ -375,7 +375,7 @@ For production deployment:
 4. **Reverse Proxy**: Configure nginx or similar for SSL and load balancing
 5. **Monitoring**: Set up application monitoring and health checks
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -383,18 +383,18 @@ For production deployment:
 4. Push to the branch
 5. Create a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
+## Support
 
 For support and questions:
 - Create an issue in the repository
 - Check the API documentation at `/api` endpoint
 - Review the Postman collection for usage examples
 
-## 🔗 Useful Endpoints
+## Useful Endpoints
 
 - **Health Check**: `GET /health`
 - **API Documentation**: `GET /api`
@@ -402,4 +402,4 @@ For support and questions:
 
 ---
 
-**Built with ❤️ using Node.js, TypeScript, and MongoDB**
+**Built with using Node.js, TypeScript, and MongoDB**

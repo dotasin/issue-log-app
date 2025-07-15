@@ -5,7 +5,7 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 import { ValidationError } from '../utils/errorTypes';
 
-// Custom Joi extensions
+// Custom Joi extensions for ObjectId
 const customJoi = Joi.extend({
   type: 'objectId',
   base: Joi.string(),
@@ -128,8 +128,13 @@ export const validate = (schema: Joi.ObjectSchema, property: 'body' | 'query' | 
       return;
     }
 
-    // Replace the property with validated value
-    req[property] = value;
+    // Only replace body since query and params are read-only in Express
+    if (property === 'body') {
+      req[property] = value;
+    }
+    // For query and params, we just validate but don't replace
+    // The validated values are already parsed correctly by Express
+    
     next();
   };
 };

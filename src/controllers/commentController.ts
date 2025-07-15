@@ -17,7 +17,7 @@ import { asyncHandler } from '../middleware/errorHandler';
  */
 export const getCommentsForIssue = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { issueId } = req.params;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = '1', limit = '20' } = req.query as any;
 
   // Check if issue exists
   const issue = await Issue.findById(issueId);
@@ -25,24 +25,27 @@ export const getCommentsForIssue = asyncHandler(async (req: Request, res: Respon
     throw new NotFoundError('Issue');
   }
 
+  const pageNum = parseInt(page as string, 10);
+  const limitNum = parseInt(limit as string, 10);
+
   // Get paginated comments
   const [comments, total] = await (Comment as any).getCommentsForIssue(
     issueId,
-    parseInt(page.toString()),
-    parseInt(limit.toString())
+    pageNum,
+    limitNum
   );
 
-  const totalPages = Math.ceil(total / parseInt(limit.toString()));
+  const totalPages = Math.ceil(total / limitNum);
 
   const response: PaginatedResponse<any> = {
     data: comments,
     pagination: {
-      page: parseInt(page.toString()),
-      limit: parseInt(limit.toString()),
+      page: pageNum,
+      limit: limitNum,
       total,
       pages: totalPages,
-      hasNext: parseInt(page.toString()) < totalPages,
-      hasPrev: parseInt(page.toString()) > 1
+      hasNext: pageNum < totalPages,
+      hasPrev: pageNum > 1
     }
   };
 
@@ -190,31 +193,33 @@ export const getMyComments = asyncHandler(async (req: AuthRequest, res: Response
     throw new ValidationError('User authentication required');
   }
 
-  const { page = 1, limit = 20 } = req.query;
+  const { page = '1', limit = '20' } = req.query as any;
 
-  const skip = (parseInt(page.toString()) - 1) * parseInt(limit.toString());
+  const pageNum = parseInt(page as string, 10);
+  const limitNum = parseInt(limit as string, 10);
+  const skip = (pageNum - 1) * limitNum;
 
   const [comments, total] = await Promise.all([
     Comment.find({ userId: req.user._id })
       .populate('issueId', 'title status')
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(parseInt(limit.toString()))
+      .limit(limitNum)
       .lean(),
     Comment.countDocuments({ userId: req.user._id })
   ]);
 
-  const totalPages = Math.ceil(total / parseInt(limit.toString()));
+  const totalPages = Math.ceil(total / limitNum);
 
   const response: PaginatedResponse<any> = {
     data: comments,
     pagination: {
-      page: parseInt(page.toString()),
-      limit: parseInt(limit.toString()),
+      page: pageNum,
+      limit: limitNum,
       total,
       pages: totalPages,
-      hasNext: parseInt(page.toString()) < totalPages,
-      hasPrev: parseInt(page.toString()) > 1
+      hasNext: pageNum < totalPages,
+      hasPrev: pageNum > 1
     }
   };
 

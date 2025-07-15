@@ -211,32 +211,35 @@ export const getMyFiles = asyncHandler(async (req: AuthRequest, res: Response, n
     throw new ValidationError('User authentication required');
   }
 
-  const { page = 1, limit = 20 } = req.query;
-  const skip = (parseInt(page.toString()) - 1) * parseInt(limit.toString());
+  const { page = '1', limit = '20' } = req.query as any;
+  
+  const pageNum = parseInt(page as string, 10);
+  const limitNum = parseInt(limit as string, 10);
+  const skip = (pageNum - 1) * limitNum;
 
   const [files, total] = await Promise.all([
     File.find({ uploadedBy: req.user._id })
       .populate('issueId', 'title status')
       .sort({ uploadedAt: -1 })
       .skip(skip)
-      .limit(parseInt(limit.toString()))
+      .limit(limitNum)
       .lean(),
     File.countDocuments({ uploadedBy: req.user._id })
   ]);
 
-  const totalPages = Math.ceil(total / parseInt(limit.toString()));
+  const totalPages = Math.ceil(total / limitNum);
 
   res.json({
     success: true,
     message: 'Your files retrieved successfully',
     data: { files },
     pagination: {
-      page: parseInt(page.toString()),
-      limit: parseInt(limit.toString()),
+      page: pageNum,
+      limit: limitNum,
       total,
       pages: totalPages,
-      hasNext: parseInt(page.toString()) < totalPages,
-      hasPrev: parseInt(page.toString()) > 1
+      hasNext: pageNum < totalPages,
+      hasPrev: pageNum > 1
     }
   });
 });

@@ -55,6 +55,13 @@ npm install -D typescript @types/node @types/express @types/cors @types/bcryptjs
 # Validation & Utilities
 npm install joi winston express-rate-limit
 npm install -D @types/joi
+
+# Testing
+npm install tslib
+npm install --save-dev jest @types/jest supertest @types/supertest ts-jest mongodb-memory-server
+
+# run the tests
+npx jest
 ```
 
 ### 3. Environment Configuration

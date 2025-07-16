@@ -47,10 +47,11 @@ cd issue-log-api
 ### 2. Install Dependencies
 ```bash
 # Core dependencies
-npm install express mongoose cors helmet morgan dotenv bcryptjs jsonwebtoken multer
+npm install express mongoose jsonwebtoken multer joi winston helmet cors bcrypt dotenv
 
 # TypeScript dependencies
-npm install -D typescript @types/node @types/express @types/cors @types/bcryptjs @types/jsonwebtoken @types/multer
+npm install -D typescript ts-node @types/node @types/express @types/jsonwebtoken @types/multer @types/joi @types/cors @types/bcrypt nodemon
+
 
 # Validation & Utilities
 npm install joi winston express-rate-limit
@@ -60,8 +61,7 @@ npm install -D @types/joi
 npm install tslib
 npm install --save-dev jest @types/jest supertest @types/supertest ts-jest mongodb-memory-server
 
-# run the tests
-npx jest
+
 ```
 
 ### 3. Environment Configuration
@@ -98,7 +98,6 @@ Create `tsconfig.json`:
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
-```
 
 ### 5. Package.json Scripts
 Update your `package.json`:
@@ -108,16 +107,53 @@ Update your `package.json`:
     "start": "node dist/app.js",
     "dev": "nodemon --exec ts-node src/app.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:auth": "jest auth.test.ts",
+    "test:issues": "jest issues.test.ts",
+    "test:comments": "jest comments.test.ts",
+    "test:files": "jest files.test.ts"
   }
 }
 ```
 
-## 🚦 Running the Application
+### 5. jest.config.json 
+Update your `package.json`:
+```json
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['<rootDir>/src'],
+  testMatch: ['**/__tests__/**/*.test.ts'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'js', 'json'],
+  testPathIgnorePatterns: ['/node_modules/'],
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setup.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.d.ts',
+    '!src/app.ts', // exclude entry point
+    '!src/__tests__/**', // exclude test files from coverage
+  ],
+  coverageDirectory: 'coverage',
+  testTimeout: 30000,
+  detectOpenHandles: true,
+  verbose: true,
+};
+
+
+## Running the Application
 
 ### Development Mode
 ```bash
 npm run dev
+
+# run the tests
+npx jest
 ```
 
 ### Production Mode
@@ -128,7 +164,7 @@ npm start
 
 The server will start on `http://localhost:3000`
 
-## 📚 API Documentation
+## API Documentation
 
 ### Base URL
 ```
@@ -181,7 +217,7 @@ http://localhost:3000/api
 | GET | `/files/my-files` | Get current user's files |
 | GET | `/files/stats` | Get file statistics |
 
-## 🔐 Authentication
+## Authentication
 
 The API uses JWT-based authentication with access and refresh tokens:
 
@@ -202,7 +238,7 @@ curl -X GET http://localhost:3000/api/issues \
   -H "Authorization: Bearer <access-token>"
 ```
 
-## 📊 Data Models
+## Data Models
 
 ### User
 ```typescript
@@ -272,7 +308,7 @@ curl -X GET http://localhost:3000/api/issues \
 - `page` - Page number (default: 1)
 - `limit` - Items per page (default: 20)
 
-## 🛡️ Security Features
+## Security Features
 
 - **Password Hashing**: bcrypt with salt rounds
 - **JWT Security**: Access and refresh token pattern
@@ -286,6 +322,14 @@ curl -X GET http://localhost:3000/api/issues \
 
 ```
 src/
+├── __tests__/       # tests
+│   ├── utils/
+│   ├	├── testHelpers.ts
+│   ├── auth.test.ts
+│   ├── comment.test.ts
+│   ├── file.test.ts
+│   ├── issue.test.ts
+│   ├── setup.ts
 ├── controllers/     # Business logic handlers
 │   ├── authController.ts
 │   ├── issueController.ts
@@ -382,31 +426,10 @@ For production deployment:
 4. **Reverse Proxy**: Configure nginx or similar for SSL and load balancing
 5. **Monitoring**: Set up application monitoring and health checks
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-For support and questions:
-- Create an issue in the repository
-- Check the API documentation at `/api` endpoint
-- Review the Postman collection for usage examples
 
 ## Useful Endpoints
 
 - **Health Check**: `GET /health`
 - **API Documentation**: `GET /api`
-- **File Uploads**: `/uploads` (static file serving)
-
----
 
 **Built with using Node.js, TypeScript, and MongoDB**

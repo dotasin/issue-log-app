@@ -1,6 +1,6 @@
 # Issue Log API
 
-A comprehensive RESTful API for issue tracking and management, built with Node.js, TypeScript, Express.js, and MongoDB. This API provides complete CRUD operations for issues, comments, file attachments, and user management with JWT-based authentication.
+This project presents a RESTful API for issue tracking and management, built with Node.js, TypeScript, Express.js, and MongoDB. This API provides complete CRUD operations for issues, comments, file attachments, and user management with JWT-based authentication.
 
 ## Features
 
@@ -60,8 +60,6 @@ npm install -D @types/joi
 # Testing
 npm install tslib
 npm install --save-dev jest @types/jest supertest @types/supertest ts-jest mongodb-memory-server
-
-
 ```
 
 ### 3. Environment Configuration

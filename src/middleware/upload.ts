@@ -1,5 +1,3 @@
-// src/middleware/upload.ts
-
 import multer, { FileFilterCallback, MulterError } from 'multer';
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';

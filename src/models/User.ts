@@ -48,10 +48,7 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-// Index for better performance (email index is created by unique: true)
-// userSchema.index({ email: 1 }); // Removed - duplicate of unique: true
-
-// Hash password before saving
+//Hash password before saving
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
 
@@ -64,17 +61,17 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-// Method to compare passwords
+//Method to compare passwords
 userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Virtual for full name
+//Virtual for full name
 userSchema.virtual('fullName').get(function() {
   return `${this.firstName} ${this.lastName}`;
 });
 
-// Ensure virtual fields are serialized
+//Ensure virtual fields are serialized
 userSchema.set('toJSON', {
   virtuals: true,
   transform: function(doc, ret: any) {

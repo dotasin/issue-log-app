@@ -1,5 +1,3 @@
-// src/__tests__/setup.ts
-
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import { database } from '../utils/database';

@@ -1,5 +1,4 @@
-// src/utils/errorTypes.ts
-
+//Base error class
 export class AppError extends Error {
   public statusCode: number;
   public isOperational: boolean;
@@ -13,49 +12,56 @@ export class AppError extends Error {
   }
 }
 
+//Validation error for input validation failures
 export class ValidationError extends AppError {
   constructor(message: string) {
     super(message, 400);
   }
 }
 
+//Authentication error for invalid credentials
 export class AuthenticationError extends AppError {
   constructor(message: string = 'Authentication failed') {
     super(message, 401);
   }
 }
 
+//Authorization error for access control
 export class AuthorizationError extends AppError {
   constructor(message: string = 'Access denied') {
     super(message, 403);
   }
 }
 
+//Not found error
 export class NotFoundError extends AppError {
   constructor(resource: string = 'Resource') {
     super(`${resource} not found`, 404);
   }
 }
 
+//Conflict error for duplicate entries
 export class ConflictError extends AppError {
   constructor(message: string) {
     super(message, 409);
   }
 }
 
+//Database error
 export class DatabaseError extends AppError {
   constructor(message: string = 'Database operation failed') {
     super(message, 500);
   }
 }
 
+// File upload error
 export class FileUploadError extends AppError {
   constructor(message: string) {
     super(message, 400);
   }
 }
 
-// Error response interface
+//Error response interface
 export interface ErrorResponse {
   success: false;
   error: {
@@ -66,7 +72,7 @@ export interface ErrorResponse {
   };
 }
 
-// Helper function to create error response
+//Helper function to create error response
 export const createErrorResponse = (
   error: AppError | Error,
   includeStack: boolean = false
@@ -83,7 +89,7 @@ export const createErrorResponse = (
   };
 };
 
-// MongoDB error handler
+//MongoDB error handler
 export const handleMongoError = (error: any): AppError => {
   if (error.code === 11000) {
     // Duplicate key error
@@ -104,7 +110,7 @@ export const handleMongoError = (error: any): AppError => {
   return new DatabaseError(error.message);
 };
 
-// JWT error handler
+//JWT error handler
 export const handleJWTError = (error: any): AppError => {
   if (error.name === 'JsonWebTokenError') {
     return new AuthenticationError('Invalid token');

@@ -1,17 +1,7 @@
-// src/__tests__/issues.test.ts
-
 import request from 'supertest';
 import app from '../app';
 import { Issue } from '../models/Issue';
-import { 
-  createTestUsers,
-  createTestIssue,
-  getAuthHeader,
-  createIssueViaAPI,
-  assertErrorResponse,
-  assertSuccessResponse,
-  assertPaginationStructure
-} from './utils/testHelpers';
+import { createTestUsers, createTestIssue, getAuthHeader, createIssueViaAPI, assertErrorResponse, assertSuccessResponse, assertPaginationStructure } from './utils/testHelpers';
 
 describe('Issues API', () => {
   let users: any;

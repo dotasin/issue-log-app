@@ -1,14 +1,11 @@
-// src/middleware/auth.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { JWTUtils } from  '../utils/jwt';
 import { User } from '../models/User';
 import { AuthRequest } from '../types';
 import { AuthenticationError, NotFoundError } from '../utils/errorTypes';
 import { logger } from  '../utils/logger';
-/**
- * Middleware to authenticate user using JWT token
- */
+
+//Middleware to authenticate user using JWT token
 export const authenticate = async (
   req: AuthRequest,
   res: Response,
@@ -41,9 +38,7 @@ export const authenticate = async (
   }
 };
 
-/**
- * Optional authentication middleware - doesn't throw error if no token
- */
+//Optional authentication middleware - doesn't throw error if no token
 export const optionalAuth = async (
   req: AuthRequest,
   res: Response,
@@ -69,9 +64,7 @@ export const optionalAuth = async (
   }
 };
 
-/**
- * Middleware to check if user owns the resource
- */
+//Middleware to check if user owns the resource
 export const checkOwnership = (resourceModel: any, resourceIdParam: string = 'id') => {
   return async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -98,9 +91,7 @@ export const checkOwnership = (resourceModel: any, resourceIdParam: string = 'id
   };
 };
 
-/**
- * Middleware to refresh expired tokens
- */
+//Middleware to refresh expired tokens
 export const refreshTokenMiddleware = async (
   req: Request,
   res: Response,
@@ -147,9 +138,7 @@ export const refreshTokenMiddleware = async (
   }
 };
 
-/**
- * Rate limiting middleware for authentication endpoints
- */
+//Rate limiting middleware for authentication endpoints
 export const authRateLimit = (maxAttempts: number = 5, windowMs: number = 15 * 60 * 1000) => {
   const attempts = new Map<string, { count: number; resetTime: number }>();
 

@@ -1,11 +1,10 @@
-// src/utils/jwt.ts
-
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { JwtPayload } from '../types';
 import { AuthenticationError } from './errorTypes';
 
 type ExpiryString = `${number}${'s' | 'm' | 'h' | 'd' | 'w' | 'y'}`; // e.g., '15m', '24h'
 
+//Utility class for JWT operations
 export class JWTUtils {
   private static accessTokenSecret: string = process.env.JWT_SECRET ?? 'fallback-secret';
   private static refreshTokenSecret: string = process.env.JWT_REFRESH_SECRET ?? 'fallback-refresh-secret';
@@ -22,9 +21,7 @@ export class JWTUtils {
     return jwt.sign(payload, this.refreshTokenSecret, options);
   }
 
-  /**
-   * Generate both access and refresh tokens
-   */
+  //Generate both access and refresh tokens
   public static generateTokens(payload: JwtPayload): {
     accessToken: string;
     refreshToken: string;
@@ -35,9 +32,7 @@ export class JWTUtils {
     };
   }
 
-  /**
-   * Verify access token
-   */
+  //Verify access token
   public static verifyAccessToken(token: string): JwtPayload {
     try {
       return jwt.verify(token, this.accessTokenSecret) as JwtPayload;
@@ -46,9 +41,7 @@ export class JWTUtils {
     }
   }
 
-  /**
-   * Verify refresh token
-   */
+  //Verify refresh token
   public static verifyRefreshToken(token: string): JwtPayload {
     try {
       return jwt.verify(token, this.refreshTokenSecret) as JwtPayload;
@@ -57,9 +50,7 @@ export class JWTUtils {
     }
   }
 
-  /**
-   * Decode token without verification (for debugging)
-   */
+  //Decode token without verification (for debugging)
   public static decodeToken(token: string): JwtPayload | null {
     try {
       return jwt.decode(token) as JwtPayload;
@@ -68,9 +59,7 @@ export class JWTUtils {
     }
   }
 
-  /**
-   * Check if token is expired
-   */
+  //Check if token is expired
   public static isTokenExpired(token: string): boolean {
     const decoded = this.decodeToken(token);
     if (!decoded || !decoded.exp) return true;
@@ -79,9 +68,7 @@ export class JWTUtils {
     return decoded.exp < currentTime;
   }
 
-  /**
-   * Extract token from Authorization header
-   */
+  //Extract token from Authorization header
   public static extractTokenFromHeader(authHeader?: string): string | null {
     if (!authHeader) return null;
 
@@ -91,9 +78,7 @@ export class JWTUtils {
     return parts[1];
   }
 
-  /**
-   * Get token expiration time
-   */
+  //Get token expiration time
   public static getTokenExpiration(token: string): Date | null {
     const decoded = this.decodeToken(token);
     if (!decoded || !decoded.exp) return null;

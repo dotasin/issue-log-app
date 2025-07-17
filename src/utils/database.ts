@@ -1,5 +1,3 @@
-// src/utils/database.ts
-
 import mongoose from 'mongoose';
 import { logger } from './logger';
 

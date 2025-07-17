@@ -1,23 +1,9 @@
 // src/routes/comments.ts
 
 import { Router } from 'express';
-import {
-  getCommentsForIssue,
-  createComment,
-  getCommentById,
-  updateComment,
-  deleteComment,
-  getMyComments,
-  getRecentComments
-} from  '../controllers/commentController';
+import { getCommentsForIssue, createComment, getCommentById, updateComment, deleteComment, getMyComments, getRecentComments } from  '../controllers/commentController';
 import { authenticate } from '../middleware/auth';
-import {
-  validateCreateComment,
-  validateUpdateComment,
-  validateCommentQuery,
-  validateObjectIdParam,
-  validateIssueIdParam
-} from  '../middleware/validation';
+import { validateCreateComment, validateUpdateComment, validateCommentQuery, validateObjectIdParam, validateIssueIdParam } from  '../middleware/validation';
 
 const router = Router();
 

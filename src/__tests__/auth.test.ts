@@ -1,15 +1,7 @@
-// src/__tests__/auth.test.ts
 
 import request from 'supertest';
 import app from '../app';
-import { User } from '../models/User';
-import { 
-  testUsers, 
-  createTestUser, 
-  getAuthHeader,
-  assertErrorResponse,
-  assertSuccessResponse 
-} from './utils/testHelpers';
+import { testUsers, createTestUser, getAuthHeader, assertErrorResponse, assertSuccessResponse } from './utils/testHelpers';
 
 describe('Authentication API', () => {
   

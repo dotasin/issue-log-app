@@ -1,24 +1,7 @@
-// src/routes/issues.ts
-
 import { Router } from 'express';
-import {
-  getIssues,
-  getIssueById,
-  createIssue,
-  updateIssue,
-  updateIssueStatus,
-  deleteIssue,
-  getMyAssignedIssues,
-  getMyCreatedIssues
-} from '../controllers/issueController';
+import { getIssues, getIssueById, createIssue, updateIssue, updateIssueStatus, deleteIssue, getMyAssignedIssues, getMyCreatedIssues } from '../controllers/issueController';
 import { authenticate } from '../middleware/auth';
-import {
-  validateCreateIssue,
-  validateUpdateIssue,
-  validateUpdateIssueStatus,
-  validateIssueQuery,
-  validateObjectIdParam
-} from '../middleware/validation';
+import { validateCreateIssue, validateUpdateIssue, validateUpdateIssueStatus, validateIssueQuery, validateObjectIdParam } from '../middleware/validation';
 
 const router = Router();
 

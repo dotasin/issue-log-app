@@ -1,24 +1,15 @@
-// src/controllers/fileController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { File } from '../models/File';
 import { Issue } from '../models/Issue';
 import { AuthRequest } from '../types';
-import { 
-  NotFoundError, 
-  ValidationError, 
-  AuthorizationError,
-  FileUploadError 
-} from '../utils/errorTypes';
+import { NotFoundError, ValidationError, AuthorizationError, FileUploadError } from '../utils/errorTypes';
 import { logger } from '../utils/logger';
 import { asyncHandler } from '../middleware/errorHandler';
 import { getFileInfo, cleanupUploadedFile } from '../middleware/upload';
 import path from 'path';
 import fs from 'fs';
 
-/**
- * Upload file(s) to an issue
- */
+//Upload file(s) to an issue
 export const uploadFiles = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -90,9 +81,7 @@ export const uploadFiles = asyncHandler(async (req: AuthRequest, res: Response, 
   }
 });
 
-/**
- * Get files for a specific issue
- */
+//Get files for a specific issue
 export const getFilesForIssue = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { issueId } = req.params;
 
@@ -111,9 +100,7 @@ export const getFilesForIssue = asyncHandler(async (req: Request, res: Response,
   });
 });
 
-/**
- * Download a specific file
- */
+//Download a specific file
 export const downloadFile = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
@@ -147,9 +134,7 @@ export const downloadFile = asyncHandler(async (req: Request, res: Response, nex
   logger.info(`File downloaded: ${file.originalName} (${id})`);
 });
 
-/**
- * Get file metadata by ID
- */
+//Get file metadata by ID
 export const getFileById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
@@ -168,9 +153,7 @@ export const getFileById = asyncHandler(async (req: Request, res: Response, next
   });
 });
 
-/**
- * Delete a file
- */
+//Delete a file
 export const deleteFile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -203,9 +186,7 @@ export const deleteFile = asyncHandler(async (req: AuthRequest, res: Response, n
   });
 });
 
-/**
- * Get files uploaded by current user
- */
+//Get files uploaded by current user
 export const getMyFiles = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -244,9 +225,7 @@ export const getMyFiles = asyncHandler(async (req: AuthRequest, res: Response, n
   });
 });
 
-/**
- * Get file statistics
- */
+//Get file statistics
 export const getFileStats = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const stats = await File.aggregate([
     {
@@ -280,9 +259,7 @@ export const getFileStats = asyncHandler(async (req: Request, res: Response, nex
   });
 });
 
-/**
- * Validate file integrity (check if files exist on disk)
- */
+//Validate file integrity (check if files exist on disk)
 export const validateFileIntegrity = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { issueId } = req.params;
 

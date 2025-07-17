@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 import { Request } from 'express';
 import { Document } from 'mongoose';
 import mongoose from 'mongoose';

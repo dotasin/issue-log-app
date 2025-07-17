@@ -1,20 +1,12 @@
-// src/controllers/authController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../models/User';
 import { JWTUtils } from '../utils/jwt';
 import { AuthRequest } from '../types';
-import { 
-  ValidationError, 
-  AuthenticationError, 
-  ConflictError 
-} from '../utils/errorTypes';
+import { ValidationError, AuthenticationError, ConflictError } from '../utils/errorTypes';
 import { logger } from '../utils/logger';
 import { asyncHandler } from '../middleware/errorHandler';
 
-/**
- * Register a new user
- */
+//Register a new user
 export const register = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, firstName, lastName } = req.body;
   console.log('Registering user:', email);
@@ -60,9 +52,7 @@ export const register = asyncHandler(async (req: Request, res: Response, next: N
   });
 });
 
-/**
- * Login user
- */
+//Login user
 export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
@@ -104,9 +94,7 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
   });
 });
 
-/**
- * Get current user profile
- */
+//Get current user profile
 export const getProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AuthenticationError('User not authenticated');
@@ -129,9 +117,7 @@ export const getProfile = asyncHandler(async (req: AuthRequest, res: Response, n
   });
 });
 
-/**
- * Update user profile
- */
+//Update user profile
 export const updateProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AuthenticationError('User not authenticated');
@@ -171,9 +157,7 @@ export const updateProfile = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-/**
- * Change password
- */
+//Change password
 export const changePassword = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AuthenticationError('User not authenticated');
@@ -205,9 +189,7 @@ export const changePassword = asyncHandler(async (req: AuthRequest, res: Respons
   });
 });
 
-/**
- * Refresh access token
- */
+//Refresh access token
 export const refreshToken = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { refreshToken } = req.body;
 
@@ -240,9 +222,7 @@ export const refreshToken = asyncHandler(async (req: Request, res: Response, nex
   });
 });
 
-/**
- * Logout user (client-side token removal)
- */
+//Logout user (client-side token removal)
 export const logout = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   // In a stateless JWT system, logout is typically handled client-side
   // by removing the tokens from storage. However, we can log the action.
@@ -257,9 +237,7 @@ export const logout = asyncHandler(async (req: AuthRequest, res: Response, next:
   });
 });
 
-/**
- * Verify token endpoint
- */
+// Verify token endpoint
 export const verifyToken = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new AuthenticationError('Invalid token');

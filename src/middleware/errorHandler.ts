@@ -1,5 +1,3 @@
-// src/middleware/errorHandler.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { 
   AppError, 
@@ -9,9 +7,7 @@ import {
 } from  '../utils/errorTypes';
 import { logger } from  '../utils/logger';
 
-/**
- * Global error handling middleware
- */
+//Global error handling middleware
 export const errorHandler = (
   error: Error | AppError,
   req: Request,
@@ -55,9 +51,7 @@ export const errorHandler = (
   res.status(processedError.statusCode).json(errorResponse);
 };
 
-/**
- * 404 Not Found handler
- */
+//404 Not Found handler
 export const notFoundHandler = (
   req: Request,
   res: Response,
@@ -70,18 +64,14 @@ export const notFoundHandler = (
   next(error);
 };
 
-/**
- * Async error wrapper to catch async errors
- */
+//Async error wrapper to catch async errors
 export const asyncHandler = (fn: Function) => {
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 };
 
-/**
- * Development error handler with detailed stack trace
- */
+//Development error handler with detailed stack trace
 export const developmentErrorHandler = (
   error: Error | AppError,
   req: Request,
@@ -108,9 +98,7 @@ export const developmentErrorHandler = (
   });
 };
 
-/**
- * Production error handler with minimal information
- */
+//Production error handler with minimal information
 export const productionErrorHandler = (
   error: Error | AppError,
   req: Request,
@@ -143,9 +131,7 @@ export const productionErrorHandler = (
   }
 };
 
-/**
- * Validation error formatter
- */
+//Validation error formatter
 export const formatValidationError = (error: any): string => {
   if (error.details) {
     return error.details.map((detail: any) => detail.message).join('. ');
@@ -153,18 +139,14 @@ export const formatValidationError = (error: any): string => {
   return error.message;
 };
 
-/**
- * MongoDB duplicate key error formatter
- */
+//MongoDB duplicate key error formatter
 export const formatDuplicateKeyError = (error: any): string => {
   const field = Object.keys(error.keyValue)[0];
   const value = error.keyValue[field];
   return `${field} '${value}' already exists`;
 };
 
-/**
- * Rate limit error handler
- */
+//Rate limit error handler
 export const rateLimitHandler = (
   req: Request,
   res: Response

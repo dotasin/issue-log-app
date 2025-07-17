@@ -1,5 +1,3 @@
-// src/models/Issue.ts
-
 import mongoose, { Schema } from 'mongoose';
 import { IIssue } from '../types';
 
@@ -60,7 +58,7 @@ const issueSchema = new Schema<IIssue>(
   }
 );
 
-// Indexes for better performance
+//Indexes for better performance
 issueSchema.index({ status: 1 });
 issueSchema.index({ priority: 1 });
 issueSchema.index({ createdBy: 1 });
@@ -68,17 +66,17 @@ issueSchema.index({ assignedTo: 1 });
 issueSchema.index({ createdAt: -1 });
 issueSchema.index({ title: 'text', description: 'text' });
 
-// Virtual for comment count
+//Virtual for comment count
 issueSchema.virtual('commentCount').get(function() {
   return this.comments ? this.comments.length : 0;
 });
 
-// Virtual for file count
+//Virtual for file count
 issueSchema.virtual('fileCount').get(function() {
   return this.files ? this.files.length : 0;
 });
 
-// Static method to get issues with pagination
+//Static method to get issues with pagination
 issueSchema.statics.getPaginatedIssues = function(
   filter: any = {},
   page: number = 1,
@@ -99,7 +97,7 @@ issueSchema.statics.getPaginatedIssues = function(
   ]);
 };
 
-// Pre-remove middleware to clean up associated comments and files
+//Pre-remove middleware to clean up associated comments and files
 issueSchema.pre('deleteOne', { document: true }, async function() {
   try {
     // Remove all comments associated with this issue
@@ -116,7 +114,7 @@ issueSchema.pre('deleteOne', { document: true }, async function() {
   }
 });
 
-// Pre-remove middleware for findOneAndDelete
+//Pre-remove middleware for findOneAndDelete
 issueSchema.pre('findOneAndDelete', async function() {
   try {
     const issue = await this.model.findOne(this.getQuery());
@@ -135,7 +133,7 @@ issueSchema.pre('findOneAndDelete', async function() {
   }
 });
 
-// Instance method to add comment
+//Instance method to add comment
 issueSchema.methods.addComment = function(commentId: mongoose.Types.ObjectId) {
   if (!this.comments.includes(commentId)) {
     this.comments.push(commentId);
@@ -144,13 +142,13 @@ issueSchema.methods.addComment = function(commentId: mongoose.Types.ObjectId) {
   return Promise.resolve(this);
 };
 
-// Instance method to remove comment
+//Instance method to remove comment
 issueSchema.methods.removeComment = function(commentId: mongoose.Types.ObjectId) {
   this.comments = this.comments.filter((id: mongoose.Types.ObjectId) => !id.equals(commentId));
   return this.save();
 };
 
-// Instance method to add file
+//Instance method to add file
 issueSchema.methods.addFile = function(fileId: mongoose.Types.ObjectId) {
   if (!this.files.includes(fileId)) {
     this.files.push(fileId);
@@ -159,7 +157,7 @@ issueSchema.methods.addFile = function(fileId: mongoose.Types.ObjectId) {
   return Promise.resolve(this);
 };
 
-// Instance method to remove file
+//Instance method to remove file
 issueSchema.methods.removeFile = function(fileId: mongoose.Types.ObjectId) {
   this.files = this.files.filter((id: mongoose.Types.ObjectId) => !id.equals(fileId));
   return this.save();

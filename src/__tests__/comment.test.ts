@@ -1,18 +1,6 @@
-// src/__tests__/comments.test.ts
-
 import request from 'supertest';
 import app from '../app';
-import { Comment } from '../models/Comment';
-import { 
-  createTestUsers,
-  createTestIssue,
-  createTestComment,
-  getAuthHeader,
-  createCommentViaAPI,
-  assertErrorResponse,
-  assertSuccessResponse,
-  assertPaginationStructure
-} from './utils/testHelpers';
+import { createTestUsers, createTestIssue, createTestComment, getAuthHeader, assertErrorResponse, assertSuccessResponse, assertPaginationStructure } from './utils/testHelpers';
 
 describe('Comments API', () => {
   let users: any;

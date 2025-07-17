@@ -1,11 +1,9 @@
-// src/middleware/validation.ts
-
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 import mongoose from 'mongoose';
 import { ValidationError } from '../utils/errorTypes';
 
-// Custom Joi extensions for ObjectId
+//Custom Joi extensions for ObjectId
 const customJoi = Joi.extend({
   type: 'objectId',
   base: Joi.string(),
@@ -20,7 +18,7 @@ const customJoi = Joi.extend({
   }
 });
 
-// Validation schemas
+//Validation schemas
 export const schemas = {
   // User schemas
   register: Joi.object({
@@ -47,7 +45,7 @@ export const schemas = {
     password: Joi.string().required()
   }),
 
-  // Issue schemas
+  //Issue schemas
   createIssue: Joi.object({
     title: Joi.string().trim().max(200).required().messages({
       'string.max': 'Title cannot exceed 200 characters',
@@ -72,7 +70,7 @@ export const schemas = {
     status: Joi.string().valid('pending', 'complete').required()
   }),
 
-  // Comment schemas
+  //Comment schemas
   createComment: Joi.object({
     content: Joi.string().trim().min(1).max(1000).required().messages({
       'string.min': 'Comment cannot be empty',
@@ -85,7 +83,7 @@ export const schemas = {
     content: Joi.string().trim().min(1).max(1000).required()
   }),
 
-  // Query parameters
+  //Query parameters
   issueQuery: Joi.object({
     status: Joi.string().valid('pending', 'complete').optional(),
     priority: Joi.string().valid('low', 'medium', 'high').optional(),
@@ -101,7 +99,7 @@ export const schemas = {
     limit: Joi.number().integer().min(1).max(50).default(20)
   }),
 
-  // Parameter validation
+  //Parameter validation
   objectIdParam: Joi.object({
     id: customJoi.objectId().required()
   }),
@@ -111,7 +109,7 @@ export const schemas = {
   })
 };
 
-// Validation middleware factory
+//Validation middleware factory
 export const validate = (schema: Joi.ObjectSchema, property: 'body' | 'query' | 'params' = 'body') => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const { error, value } = schema.validate(req[property], {
@@ -139,7 +137,7 @@ export const validate = (schema: Joi.ObjectSchema, property: 'body' | 'query' | 
   };
 };
 
-// Specific validation middleware
+//Specific validation middleware
 export const validateRegister = validate(schemas.register);
 export const validateLogin = validate(schemas.login);
 export const validateCreateIssue = validate(schemas.createIssue);
@@ -152,7 +150,7 @@ export const validateCommentQuery = validate(schemas.commentQuery, 'query');
 export const validateObjectIdParam = validate(schemas.objectIdParam, 'params');
 export const validateIssueIdParam = validate(schemas.issueIdParam, 'params');
 
-// Combined validation for routes with multiple validations
+//Combined validation for routes with multiple validations
 export const validateIssueRouteParams = [
   validate(schemas.issueIdParam, 'params'),
   validate(schemas.commentQuery, 'query')

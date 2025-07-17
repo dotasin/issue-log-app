@@ -1,17 +1,8 @@
-// src/__tests__/files.test.ts
-
 import request from 'supertest';
 import app from '../app';
 import path from 'path';
 import fs from 'fs';
-import { File } from '../models/File';
-import { 
-  createTestUsers,
-  createTestIssue,
-  getAuthHeader,
-  assertErrorResponse,
-  assertSuccessResponse
-} from './utils/testHelpers';
+import { createTestUsers, createTestIssue, getAuthHeader, assertErrorResponse,  assertSuccessResponse } from './utils/testHelpers';
 
 describe('Files API', () => {
   let users: any;

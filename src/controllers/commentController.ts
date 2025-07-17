@@ -1,20 +1,12 @@
-// src/controllers/commentController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { Comment } from '../models/Comment';
 import { Issue } from '../models/Issue';
 import { AuthRequest, PaginatedResponse } from '../types';
-import { 
-  NotFoundError, 
-  ValidationError, 
-  AuthorizationError 
-} from '../utils/errorTypes';
+import { NotFoundError, ValidationError, AuthorizationError } from '../utils/errorTypes';
 import { logger } from '../utils/logger';
 import { asyncHandler } from '../middleware/errorHandler';
 
-/**
- * Get comments for a specific issue
- */
+//Get comments for a specific issue
 export const getCommentsForIssue = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { issueId } = req.params;
   const { page = '1', limit = '20' } = req.query as any;
@@ -56,9 +48,7 @@ export const getCommentsForIssue = asyncHandler(async (req: Request, res: Respon
   });
 });
 
-/**
- * Create a new comment for an issue
- */
+//Create a new comment for an issue
 export const createComment = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -94,9 +84,7 @@ export const createComment = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-/**
- * Get a specific comment by ID
- */
+//Get a specific comment by ID
 export const getCommentById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
@@ -115,9 +103,7 @@ export const getCommentById = asyncHandler(async (req: Request, res: Response, n
   });
 });
 
-/**
- * Update a comment
- */
+//Update a comment
 export const updateComment = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -151,9 +137,7 @@ export const updateComment = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-/**
- * Delete a comment
- */
+//Delete a comment
 export const deleteComment = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -185,9 +169,7 @@ export const deleteComment = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-/**
- * Get comments by current user
- */
+//Get comments by current user
 export const getMyComments = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -230,9 +212,7 @@ export const getMyComments = asyncHandler(async (req: AuthRequest, res: Response
   });
 });
 
-/**
- * Get recent comments for dashboard
- */
+//Get recent comments for dashboard
 export const getRecentComments = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { limit = 10 } = req.query;
 

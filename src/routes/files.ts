@@ -1,28 +1,8 @@
-// src/routes/files.ts
-
 import { Router } from 'express';
-import {
-  uploadFiles,
-  getFilesForIssue,
-  downloadFile,
-  getFileById,
-  deleteFile,
-  getMyFiles,
-  getFileStats,
-  validateFileIntegrity
-} from  '../controllers/fileController';
+import { uploadFiles, getFilesForIssue, downloadFile, getFileById, deleteFile, getMyFiles, getFileStats, validateFileIntegrity } from  '../controllers/fileController';
 import { authenticate } from '../middleware/auth';
-import {
-  uploadMultiple,
-  handleUploadError,
-  validateUploadedFile,
-  cleanupOnError
-} from '../middleware/upload';
-import {
-  validateObjectIdParam,
-  validateIssueIdParam,
-  validateCommentQuery
-} from  '../middleware/validation';
+import { uploadMultiple, handleUploadError, cleanupOnError } from '../middleware/upload';
+import { validateObjectIdParam, validateIssueIdParam, validateCommentQuery } from  '../middleware/validation';
 
 const router = Router();
 

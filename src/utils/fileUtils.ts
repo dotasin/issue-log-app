@@ -1,5 +1,3 @@
-// src/utils/fileUtils.ts
-
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
@@ -13,9 +11,7 @@ const fsMkdir = promisify(fs.mkdir);
 const fsReaddir = promisify(fs.readdir);
 
 export class FileUtils {
-  /**
-   * Check if a file exists
-   */
+  //Check if a file exists
   static async fileExists(filePath: string): Promise<boolean> {
     try {
       await fsStat(filePath);
@@ -25,9 +21,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Delete a file from the filesystem
-   */
+  //Delete a file from the filesystem
   static async deleteFile(filePath: string): Promise<boolean> {
     try {
       if (await this.fileExists(filePath)) {
@@ -42,9 +36,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Create directory if it doesn't exist
-   */
+  //Create directory if it doesn't exist
   static async ensureDirectory(dirPath: string): Promise<boolean> {
     try {
       if (!(await this.fileExists(dirPath))) {
@@ -58,9 +50,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Get file size in bytes
-   */
+  //Get file size in bytes
   static async getFileSize(filePath: string): Promise<number | null> {
     try {
       const stats = await fsStat(filePath);
@@ -71,9 +61,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Format file size to human readable format
-   */
+  //Format file size to human readable format
   static formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
     
@@ -84,23 +72,17 @@ export class FileUtils {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
-  /**
-   * Get file extension from filename
-   */
+  //Get file extension from filename
   static getFileExtension(filename: string): string {
     return path.extname(filename).toLowerCase();
   }
 
-  /**
-   * Get filename without extension
-   */
+  //Get filename without extension
   static getFileNameWithoutExtension(filename: string): string {
     return path.basename(filename, path.extname(filename));
   }
 
-  /**
-   * Generate unique filename
-   */
+  //Generate unique filename
   static generateUniqueFilename(originalName: string): string {
     const ext = this.getFileExtension(originalName);
     const name = this.getFileNameWithoutExtension(originalName);
@@ -109,23 +91,17 @@ export class FileUtils {
     return `${name}_${timestamp}_${random}${ext}`;
   }
 
-  /**
-   * Validate file type against allowed types
-   */
+  //Validate file type against allowed types
   static isFileTypeAllowed(mimetype: string, allowedTypes: string[]): boolean {
     return allowedTypes.includes(mimetype);
   }
 
-  /**
-   * Validate file size
-   */
+  //Validate file size
   static isFileSizeValid(size: number, maxSize: number): boolean {
     return size <= maxSize;
   }
 
-  /**
-   * Get MIME type from file extension
-   */
+  //Get MIME type from file extension
   static getMimeTypeFromExtension(extension: string): string {
     const mimeTypes: { [key: string]: string } = {
       '.jpg': 'image/jpeg',
@@ -146,9 +122,7 @@ export class FileUtils {
     return mimeTypes[extension.toLowerCase()] || 'application/octet-stream';
   }
 
-  /**
-   * Clean up temporary files older than specified time
-   */
+  //Clean up temporary files older than specified time
   static async cleanupOldFiles(directoryPath: string, maxAgeMs: number): Promise<number> {
     try {
       if (!(await this.fileExists(directoryPath))) {
@@ -178,9 +152,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Get directory size (total size of all files)
-   */
+  //Get directory size (total size of all files)
   static async getDirectorySize(directoryPath: string): Promise<number> {
     try {
       if (!(await this.fileExists(directoryPath))) {
@@ -208,9 +180,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Copy file from source to destination
-   */
+  //Copy file from source to destination
   static async copyFile(sourcePath: string, destinationPath: string): Promise<boolean> {
     try {
       // Ensure destination directory exists
@@ -237,9 +207,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Move file from source to destination
-   */
+  //Move file from source to destination
   static async moveFile(sourcePath: string, destinationPath: string): Promise<boolean> {
     try {
       if (await this.copyFile(sourcePath, destinationPath)) {
@@ -254,9 +222,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Get file metadata
-   */
+  //Get file metadata
   static async getFileMetadata(filePath: string): Promise<{
     exists: boolean;
     size?: number;
@@ -285,9 +251,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Validate file integrity by checking if file exists and has expected size
-   */
+  //Validate file integrity by checking if file exists and has expected size
   static async validateFileIntegrity(filePath: string, expectedSize: number): Promise<boolean> {
     try {
       const actualSize = await this.getFileSize(filePath);
@@ -298,9 +262,7 @@ export class FileUtils {
     }
   }
 
-  /**
-   * Create file backup with timestamp
-   */
+  //Create file backup with timestamp
   static async backupFile(filePath: string, backupDir?: string): Promise<string | null> {
     try {
       if (!(await this.fileExists(filePath))) {

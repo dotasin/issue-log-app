@@ -1,20 +1,12 @@
-// src/controllers/issueController.ts
-
 import { Request, Response, NextFunction } from 'express';
 import { Issue } from '../models/Issue';
 import { User } from '../models/User';
 import { AuthRequest, IssueQueryParams, PaginatedResponse } from '../types';
-import { 
-  NotFoundError, 
-  ValidationError, 
-  AuthorizationError 
-} from '../utils/errorTypes';
+import { NotFoundError, ValidationError, AuthorizationError } from '../utils/errorTypes';
 import { logger } from '../utils/logger';
 import { asyncHandler } from '../middleware/errorHandler';
 
-/**
- * Get all issues with pagination and filtering
- */
+//Get all issues with pagination and filtering
 export const getIssues = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   const {
     status,
@@ -74,9 +66,7 @@ export const getIssues = asyncHandler(async (req: AuthRequest, res: Response, ne
   });
 });
 
-/**
- * Get single issue by ID
- */
+//Get single issue by ID
 export const getIssueById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
@@ -110,9 +100,7 @@ export const getIssueById = asyncHandler(async (req: Request, res: Response, nex
   });
 });
 
-/**
- * Create new issue
- */
+//Create new issue
 export const createIssue = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -153,9 +141,7 @@ export const createIssue = asyncHandler(async (req: AuthRequest, res: Response, 
   });
 });
 
-/**
- * Update issue
- */
+//Update issue
 export const updateIssue = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -209,9 +195,7 @@ export const updateIssue = asyncHandler(async (req: AuthRequest, res: Response, 
   });
 });
 
-/**
- * Update issue status
- */
+//Update issue status
 export const updateIssueStatus = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -250,9 +234,7 @@ export const updateIssueStatus = asyncHandler(async (req: AuthRequest, res: Resp
   });
 });
 
-/**
- * Delete issue
- */
+//Delete issue
 export const deleteIssue = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -281,9 +263,7 @@ export const deleteIssue = asyncHandler(async (req: AuthRequest, res: Response, 
   });
 });
 
-/**
- * Get issues assigned to current user
- */
+//Get issues assigned to current user
 export const getMyAssignedIssues = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');
@@ -321,9 +301,7 @@ export const getMyAssignedIssues = asyncHandler(async (req: AuthRequest, res: Re
   });
 });
 
-/**
- * Get issues created by current user
- */
+//Get issues created by current user
 export const getMyCreatedIssues = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     throw new ValidationError('User authentication required');

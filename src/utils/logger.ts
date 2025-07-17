@@ -1,9 +1,7 @@
-// src/utils/logger.ts
-
 import winston from 'winston';
 import path from 'path';
 
-// Define log levels
+//Define log levels
 const levels = {
   error: 0,
   warn: 1,
@@ -12,7 +10,7 @@ const levels = {
   debug: 4,
 };
 
-// Define colors for each level
+//Define colors for each level
 const colors = {
   error: 'red',
   warn: 'yellow',
@@ -21,10 +19,10 @@ const colors = {
   debug: 'white',
 };
 
-// Tell winston about the colors
+//Tell winston about the colors
 winston.addColors(colors);
 
-// Define log format
+//Define log format
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
   winston.format.colorize({ all: true }),
@@ -33,9 +31,9 @@ const format = winston.format.combine(
   )
 );
 
-// Define transports
+//Define transports
 const transports = [
-  // Console transport
+  //Console transport
   new winston.transports.Console({
     format: winston.format.combine(
       winston.format.colorize(),
@@ -43,7 +41,7 @@ const transports = [
     )
   }),
 
-  // File transport for errors
+  //File transport for errors
   new winston.transports.File({
     filename: path.join(process.cwd(), 'logs', 'error.log'),
     level: 'error',
@@ -53,7 +51,7 @@ const transports = [
     )
   }),
 
-  // File transport for all logs
+  //File transport for all logs
   new winston.transports.File({
     filename: path.join(process.cwd(), 'logs', 'combined.log'),
     format: winston.format.combine(
@@ -63,29 +61,29 @@ const transports = [
   })
 ];
 
-// Create logger instance
+//Create logger instance
 const logger = winston.createLogger({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   levels,
   format,
   transports,
-  // Handle exceptions
+  //Handle exceptions
   exceptionHandlers: [
     new winston.transports.File({ 
       filename: path.join(process.cwd(), 'logs', 'exceptions.log')
     })
   ],
-  // Handle rejections
+  //Handle rejections
   rejectionHandlers: [
     new winston.transports.File({ 
       filename: path.join(process.cwd(), 'logs', 'rejections.log')
     })
   ],
-  // Don't exit on handled exceptions
+  //Don't exit on handled exceptions
   exitOnError: false
 });
 
-// Create logs directory if it doesn't exist
+//Create logs directory if it doesn't exist
 import fs from 'fs';
 const logsDir = path.join(process.cwd(), 'logs');
 if (!fs.existsSync(logsDir)) {
@@ -94,7 +92,7 @@ if (!fs.existsSync(logsDir)) {
 
 export { logger };
 
-// Export stream for Morgan HTTP logging
+//Export stream for Morgan HTTP logging
 export const morganStream = {
   write: (message: string) => {
     logger.http(message.trim());

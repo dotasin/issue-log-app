@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Import utilities
+//Import utilities
 import { database } from './utils/database';
 import { logger, morganStream } from './utils/logger';
 import {
@@ -15,7 +15,7 @@ import {
   productionErrorHandler
 } from './middleware/errorHandler';
 
-// Import routes
+//Import routes
 import authRoutes from './routes/auth';
 import issueRoutes from './routes/issues';
 import commentRoutes from './routes/comments';
@@ -27,6 +27,7 @@ let server: ReturnType<typeof app.listen>;
 
 app.set('trust proxy', 1);
 
+//Adds security-related HTTP headers
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));

@@ -1,5 +1,3 @@
-// src/models/File.ts
-
 import mongoose, { Schema } from 'mongoose';
 import { IFile } from '../types';
 import fs from 'fs';
@@ -58,16 +56,16 @@ const fileSchema = new Schema<IFile>(
   }
 );
 
-// Indexes for better performance
+//Indexes for better performance
 fileSchema.index({ issueId: 1, uploadedAt: -1 });
 fileSchema.index({ uploadedBy: 1 });
 
-// Virtual for file extension
+//Virtual for file extension
 fileSchema.virtual('extension').get(function() {
   return path.extname(this.originalName).toLowerCase();
 });
 
-// Virtual for human-readable file size
+//Virtual for human-readable file size
 fileSchema.virtual('sizeFormatted').get(function() {
   const bytes = this.size;
   if (bytes === 0) return '0 Bytes';
@@ -79,7 +77,7 @@ fileSchema.virtual('sizeFormatted').get(function() {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 });
 
-// Static method to get files for an issue
+//Static method to get files for an issue
 fileSchema.statics.getFilesForIssue = function(issueId: string) {
   return this.find({ issueId })
     .populate('uploadedBy', 'firstName lastName email')
@@ -87,7 +85,7 @@ fileSchema.statics.getFilesForIssue = function(issueId: string) {
     .lean();
 };
 
-// Method to check if file exists on disk
+//Method to check if file exists on disk
 fileSchema.methods.fileExists = function(): boolean {
   try {
     return fs.existsSync(this.path);
@@ -96,7 +94,7 @@ fileSchema.methods.fileExists = function(): boolean {
   }
 };
 
-// Method to delete file from disk
+//Method to delete file from disk
 fileSchema.methods.deleteFromDisk = function(): boolean {
   try {
     if (this.fileExists()) {
@@ -110,7 +108,7 @@ fileSchema.methods.deleteFromDisk = function(): boolean {
   }
 };
 
-// Post middleware to update issue's files array when file is created
+//Post middleware to update issue's files array when file is created
 fileSchema.post('save', async function() {
   try {
     await mongoose.model('Issue').findByIdAndUpdate(
@@ -122,7 +120,7 @@ fileSchema.post('save', async function() {
   }
 });
 
-// Pre middleware to delete file from disk when document is deleted
+//Pre middleware to delete file from disk when document is deleted
 fileSchema.pre('deleteOne', { document: true }, function(this: IFile) {
   this.deleteFromDisk();
 });
@@ -139,7 +137,7 @@ fileSchema.pre('findOneAndDelete', async function() {
   }
 });
 
-// Pre-remove middleware to clean up associated comments and files
+//Pre-remove middleware to clean up associated comments and files
 fileSchema.pre('deleteOne', { document: true }, async function() {
   try {
     // Remove all comments associated with this issue
@@ -157,7 +155,7 @@ fileSchema.pre('deleteOne', { document: true }, async function() {
 });
 
 
-// Post middleware for findOneAndDelete
+//Post middleware for findOneAndDelete
 fileSchema.post('findOneAndDelete', async function(doc: IFile | null) {
   try {
     if (doc) {

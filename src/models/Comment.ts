@@ -1,5 +1,3 @@
-// src/models/Comment.ts
-
 import mongoose, { Schema } from 'mongoose';
 import { IComment } from '../types';
 
@@ -35,7 +33,7 @@ const commentSchema = new Schema<IComment>(
   }
 );
 
-// Indexes for better performance
+//Indexes for better performance
 commentSchema.index({ issueId: 1, createdAt: -1 });
 commentSchema.index({ userId: 1 });
 
@@ -58,7 +56,7 @@ commentSchema.statics.getCommentsForIssue = function(
   ]);
 };
 
-// Post middleware to update issue's comments array when comment is created
+//Post middleware to update issue's comments array when comment is created
 commentSchema.post('save', async function() {
   try {
     await mongoose.model('Issue').findByIdAndUpdate(
@@ -70,9 +68,9 @@ commentSchema.post('save', async function() {
   }
 });
 
-// Post middleware to remove comment from issue's comments array when comment is deleted
+//Post middleware to remove comment from issue's comments array when comment is deleted
 
-// Pre-remove middleware to clean up associated comments and files
+//Pre-remove middleware to clean up associated comments and files
 commentSchema.pre('deleteOne', { document: true }, async function() {
   try {
     // Remove all comments associated with this issue

@@ -32,6 +32,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
+//Enable CORS for allowed origins
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
   credentials: true,
@@ -39,10 +40,13 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
+//Parses incoming JSON requests with a body size limit
 app.use(express.json({ limit: '10mb' }));
+//Parses incoming requests with urlencoded payloads
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+//Logging HTTP requests
 app.use(morgan('combined', { stream: morganStream }));
-
+//Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Basic health & test routes
@@ -57,10 +61,13 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Test route to verify server is working
 app.get('/test', (req, res) => {
   res.json({ success: true, message: 'Test working' });
 });
 
+// API documentation route
+// This route provides an overview of the API endpoints
 app.get('/api', (req, res) => {
   res.json({
     success: true,
@@ -104,7 +111,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/issues', issueRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/files', fileRoutes);
-logger.info('Routes registered ✅');
+logger.info('Routes registered successfully');
 
 // 404 & Error handling
 app.use(notFoundHandler);

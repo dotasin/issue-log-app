@@ -406,28 +406,9 @@ Log files are stored in the `logs/` directory:
 - `exceptions.log` - Uncaught exceptions
 - `rejections.log` - Unhandled promise rejections
 
-## Data Integrity
-
-The API maintains data integrity through:
-- **Cascade Deletes**: Automatic cleanup of related data
-- **Reference Validation**: Ensures valid ObjectId references
-- **File Cleanup**: Removes orphaned files from disk
-- **Transaction Safety**: Atomic operations where needed
-
-## Production Deployment
-
-For production deployment:
-
-1. **Environment Variables**: Set secure JWT secrets and production MongoDB URI
-2. **Build Application**: Run `npm run build`
-3. **Process Management**: Use PM2 or similar for process management
-4. **Reverse Proxy**: Configure nginx or similar for SSL and load balancing
-5. **Monitoring**: Set up application monitoring and health checks
-
-
 ## Useful Endpoints
 
 - **Health Check**: `GET /health`
 - **API Documentation**: `GET /api`
 
-**Built with using Node.js, TypeScript, and MongoDB**
+**Built using Node.js, TypeScript, and MongoDB**

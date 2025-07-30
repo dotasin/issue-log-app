@@ -21,10 +21,14 @@ import issueRoutes from './routes/issues';
 import commentRoutes from './routes/comments';
 import fileRoutes from './routes/files';
 
+// Load environment variables
 dotenv.config();
+// Initialize Express app
 const app = express();
+// Set up application-level middleware
 let server: ReturnType<typeof app.listen>;
 
+// Trust first proxy for secure connections (if behind a reverse proxy)
 app.set('trust proxy', 1);
 
 //Adds security-related HTTP headers
@@ -32,6 +36,8 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
+// CORS configuration
+// Allows requests from specified origins and enables credentials
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
   credentials: true,
@@ -61,6 +67,7 @@ app.get('/test', (req, res) => {
   res.json({ success: true, message: 'Test working' });
 });
 
+// API Documentation route
 app.get('/api', (req, res) => {
   res.json({
     success: true,
@@ -119,12 +126,21 @@ process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
   process.exit(1);
 });
 
+
+/**
+ * Starts the Express server and connects to the database.
+ *
+ * Attempts to establish a connection to the database, then starts
+ * the HTTP server on the specified port (default: 3000).
+ * Logs the server's URL when successfully started.
+ * On startup failure, logs the error and exits the process.
+ */
 const startServer = async () => {
   try {
     await database.connect();
     const port = process.env.PORT || 3000;
     server = app.listen(port, () => {
-      logger.info(`🚀 Server running on http://localhost:${port}`);
+      logger.info(`Server running on http://localhost:${port}`);
     });
   } catch (err) {
     logger.error('Startup failed:', err);
@@ -132,6 +148,13 @@ const startServer = async () => {
   }
 };
 
+
+/**
+ * Gracefully shut down the server.
+ *
+ * Disconnects from the database and then closes the HTTP server.
+ * If the server is not running, it simply exits the process.
+ */
 const shutdown = async () => {
   logger.info('Gracefully shutting down...');
   await database.disconnect();
@@ -145,17 +168,21 @@ const shutdown = async () => {
   }
 };
 
+// Handle process termination signals for graceful shutdown
 process.on('SIGINT', shutdown);
+// Handle process termination signals for graceful shutdown
 process.on('SIGTERM', shutdown);
+// Handle uncaught exceptions and unhandled rejections
 process.on('uncaughtException', (err) => {
   logger.error('Uncaught Exception:', err);
   process.exit(1);
 });
+// Handle unhandled promise rejections
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection:', reason);
   process.exit(1);
 });
-
+// Start the server if this file is run directly
 if (require.main === module) {
   startServer();
 }

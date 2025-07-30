@@ -23,21 +23,20 @@ import fileRoutes from './routes/files';
 
 // Load environment variables
 dotenv.config();
+
 // Initialize Express app
 const app = express();
-// Set up application-level middleware
 let server: ReturnType<typeof app.listen>;
 
 // Trust first proxy for secure connections (if behind a reverse proxy)
 app.set('trust proxy', 1);
 
-//Adds security-related HTTP headers
+// Adds security-related HTTP headers
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
 // CORS configuration
-// Allows requests from specified origins and enables credentials
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
   credentials: true,
@@ -45,16 +44,17 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
-//Parses incoming JSON requests with a body size limit
+// Request parsers
 app.use(express.json({ limit: '10mb' }));
-//Parses incoming requests with urlencoded payloads
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-//Logging HTTP requests
+
+// Logging
 app.use(morgan('combined', { stream: morganStream }));
-//Serve static files from the uploads directory
+
+// Serve static files
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
-// Basic health & test routes
+// Health check
 app.get('/health', (req, res) => {
   res.json({
     success: true,
@@ -66,12 +66,12 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Test route to verify server is working
+// Test route
 app.get('/test', (req, res) => {
   res.json({ success: true, message: 'Test working' });
 });
 
-// API Documentation route
+// API documentation
 app.get('/api', (req, res) => {
   res.json({
     success: true,
@@ -109,7 +109,7 @@ app.get('/api', (req, res) => {
   });
 });
 
-// Route registration with logging
+// Route registration
 logger.info('Registering API routes...');
 app.use('/api/auth', authRoutes);
 app.use('/api/issues', issueRoutes);
@@ -117,7 +117,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/files', fileRoutes);
 logger.info('Routes registered successfully');
 
-// 404 & Error handling
+// Error handling
 app.use(notFoundHandler);
 if (process.env.NODE_ENV === 'development') {
   app.use(developmentErrorHandler);
@@ -125,19 +125,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(productionErrorHandler);
 }
 
-process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
-  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
-});
-
-
 /**
  * Starts the Express server and connects to the database.
- *
- * Attempts to establish a connection to the database, then starts
- * the HTTP server on the specified port (default: 3000).
- * Logs the server's URL when successfully started.
- * On startup failure, logs the error and exits the process.
  */
 const startServer = async () => {
   try {
@@ -152,40 +141,53 @@ const startServer = async () => {
   }
 };
 
-
 /**
  * Gracefully shut down the server.
- *
- * Disconnects from the database and then closes the HTTP server.
- * If the server is not running, it simply exits the process.
  */
 const shutdown = async () => {
   logger.info('Gracefully shutting down...');
   await database.disconnect();
+
   if (server) {
-    server.close(() => {
-      logger.info('HTTP server closed');
-      process.exit(0);
+    await new Promise<void>((resolve, reject) => {
+      server.close((err) => {
+        if (err) {
+          logger.error('Error closing server:', err);
+          reject(err);
+        } else {
+          logger.info('HTTP server closed');
+          resolve();
+        }
+      });
     });
-  } else {
-    process.exit(0);
   }
+
+  process.exit(0);
 };
 
-// Handle process termination signals for graceful shutdown
-process.on('SIGINT', shutdown);
-// Handle process termination signals for graceful shutdown
-process.on('SIGTERM', shutdown);
-// Handle uncaught exceptions and unhandled rejections
+// Graceful shutdown on SIGINT and SIGTERM
+process.on('SIGINT', () => {
+  logger.info('SIGINT received');
+  shutdown();
+});
+
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received');
+  shutdown();
+});
+
+// Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
   logger.error('Uncaught Exception:', err);
-  process.exit(1);
+  shutdown();
 });
+
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection:', reason);
-  process.exit(1);
+  shutdown();
 });
+
 // Start the server if this file is run directly
 if (require.main === module) {
   startServer();

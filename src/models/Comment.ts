@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { IComment } from '../types';
+import { logger } from '../utils/logger';
 
 const commentSchema = new Schema<IComment>(
   {
@@ -64,7 +65,7 @@ commentSchema.post('save', async function() {
       { $addToSet: { comments: this._id } }
     );
   } catch (error) {
-    console.error('Error updating issue comments array:', error);
+    logger.error('Error updating issue comments array:', error);
   }
 });
 
@@ -78,7 +79,7 @@ commentSchema.pre('deleteOne', { document: true }, async function() {
     
     // Remove all files associated with this issue
   } catch (error) {
-    console.error('Error cleaning up issue dependencies:', error);
+    logger.error('Error cleaning up issue dependencies:', error);
   }
 });
 

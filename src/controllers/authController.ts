@@ -9,7 +9,7 @@ import { asyncHandler } from '../middleware/errorHandler';
 //Register a new user
 export const register = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password, firstName, lastName } = req.body;
-  console.log('Registering user:', email);
+  logger.log('Registering user:', email);
   // Check if user already exists
   const existingUser = await User.findOne({ email });
   if (existingUser) {

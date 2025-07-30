@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { IFile } from '../types';
 import fs from 'fs';
 import path from 'path';
+import { logger } from '../utils/logger';
 
 const fileSchema = new Schema<IFile>(
   {
@@ -103,7 +104,7 @@ fileSchema.methods.deleteFromDisk = function(): boolean {
     }
     return false;
   } catch (error) {
-    console.error('Error deleting file from disk:', error);
+    logger.error('Error deleting file from disk:', error);
     return false;
   }
 };
@@ -116,7 +117,7 @@ fileSchema.post('save', async function() {
       { $addToSet: { files: this._id } }
     );
   } catch (error) {
-    console.error('Error updating issue files array:', error);
+    logger.error('Error updating issue files array:', error);
   }
 });
 
@@ -133,7 +134,7 @@ fileSchema.pre('findOneAndDelete', async function() {
       file.deleteFromDisk();
     }
   } catch (error) {
-    console.error('Error deleting file from disk:', error);
+    logger.error('Error deleting file from disk:', error);
   }
 });
 
@@ -150,7 +151,7 @@ fileSchema.pre('deleteOne', { document: true }, async function() {
       await file.deleteOne();
     }
   } catch (error) {
-    console.error('Error cleaning up issue dependencies:', error);
+    logger.error('Error cleaning up issue dependencies:', error);
   }
 });
 
@@ -165,7 +166,7 @@ fileSchema.post('findOneAndDelete', async function(doc: IFile | null) {
       );
     }
   } catch (error) {
-    console.error('Error removing file from issue files array:', error);
+    logger.error('Error removing file from issue files array:', error);
   }
 });
 

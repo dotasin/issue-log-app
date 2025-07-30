@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { IIssue } from '../types';
+import { logger } from '../utils/logger';
 
 const issueSchema = new Schema<IIssue>(
   {
@@ -110,7 +111,7 @@ issueSchema.pre('deleteOne', { document: true }, async function() {
       await file.deleteOne();
     }
   } catch (error) {
-    console.error('Error cleaning up issue dependencies:', error);
+    logger.error('Error cleaning up issue dependencies:', error);
   }
 });
 
@@ -129,7 +130,7 @@ issueSchema.pre('findOneAndDelete', async function() {
       }
     }
   } catch (error) {
-    console.error('Error cleaning up issue dependencies:', error);
+    logger.error('Error cleaning up issue dependencies:', error);
   }
 });
 

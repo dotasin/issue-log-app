@@ -1,0 +1,16 @@
+{
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "Launch Express Server",
+          "runtimeArgs": ["-r", "ts-node/register"],
+          "args": ["${workspaceFolder}/src/app.ts"], // Adjust to your entry file
+          "cwd": "${workspaceFolder}",
+          "protocol": "inspector",
+          "sourceMaps": true,
+          "console": "integratedTerminal"
+        }
+      ]
+    }

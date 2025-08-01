@@ -3,7 +3,8 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 import { ValidationError } from '../utils/errorTypes';
 
-//Custom Joi extensions for ObjectId
+//Creates a custom Joi extension 'objectId' that validates MongoDB ObjectId format - based on string type, uses mongoose.Types.ObjectId.isValid() 
+//to check validity, and returns custom error message 'Invalid ObjectId format' if value is not a valid ObjectId
 const customJoi = Joi.extend({
   type: 'objectId',
   base: Joi.string(),
@@ -19,6 +20,8 @@ const customJoi = Joi.extend({
 });
 
 //Validation schemas
+//Defines Joi validation schemas for user registration/login, issue management (create/update/status), 
+//and comment operations with custom error messages, field length limits, and MongoDB ObjectId validation using the custom extension
 export const schemas = {
   // User schemas
   register: Joi.object({
@@ -110,6 +113,9 @@ export const schemas = {
 };
 
 //Validation middleware factory
+//Creates a validation middleware factory that validates Express request data (body/query/params) against Joi schemas, 
+//strips unknown fields, collects all validation errors,
+//and passes a ValidationError to next() if validation fails, only replacing req.body with sanitized values while leaving query/params unchanged
 export const validate = (schema: Joi.ObjectSchema, property: 'body' | 'query' | 'params' = 'body') => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const { error, value } = schema.validate(req[property], {

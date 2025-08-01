@@ -38,7 +38,7 @@ const commentSchema = new Schema<IComment>(
 commentSchema.index({ issueId: 1, createdAt: -1 });
 commentSchema.index({ userId: 1 });
 
-// Static method to get comments for an issue with pagination
+//Static method to get comments for an issue with pagination
 commentSchema.statics.getCommentsForIssue = function(
   issueId: string,
   page: number = 1,
@@ -70,7 +70,6 @@ commentSchema.post('save', async function() {
 });
 
 //Post middleware to remove comment from issue's comments array when comment is deleted
-
 //Pre-remove middleware to clean up associated comments and files
 commentSchema.pre('deleteOne', { document: true }, async function() {
   try {

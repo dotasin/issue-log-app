@@ -11,11 +11,13 @@ export class JWTUtils {
   private static accessTokenExpiry: ExpiryString = (process.env.JWT_EXPIRES_IN ?? '24h') as ExpiryString;
   private static refreshTokenExpiry: ExpiryString = (process.env.JWT_REFRESH_EXPIRES_IN ?? '7d') as ExpiryString;
 
+  //Generate access token
   public static generateAccessToken(payload: JwtPayload): string {
     const options: SignOptions = { expiresIn: this.accessTokenExpiry };
     return jwt.sign(payload, this.accessTokenSecret, options);
   }
-
+  
+  //Generate refresh token
   public static generateRefreshToken(payload: JwtPayload): string {
     const options: SignOptions = { expiresIn: this.refreshTokenExpiry };
     return jwt.sign(payload, this.refreshTokenSecret, options);

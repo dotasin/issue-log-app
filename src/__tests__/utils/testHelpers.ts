@@ -48,9 +48,7 @@ export const testUsers = {
   }
 };
 
-/**
- * Create a test user and return user data with tokens
- */
+// Create a test user and return user data with tokens
 export const createTestUser = async (userData = testUsers.user1): Promise<TestUser> => {
   const user = new User(userData);
   await user.save();
@@ -71,9 +69,7 @@ export const createTestUser = async (userData = testUsers.user1): Promise<TestUs
   };
 };
 
-/**
- * Create multiple test users
- */
+// Create multiple test users
 export const createTestUsers = async (): Promise<{
   user1: TestUser;
   user2: TestUser;
@@ -86,9 +82,7 @@ export const createTestUsers = async (): Promise<{
   return { user1, user2, admin };
 };
 
-/**
- * Create a test issue
- */
+// Create a test issue
 export const createTestIssue = async (createdBy: string, assignedTo?: string): Promise<TestIssue> => {
   const issueData = {
     title: 'Test Issue',
@@ -113,9 +107,7 @@ export const createTestIssue = async (createdBy: string, assignedTo?: string): P
   };
 };
 
-/**
- * Create a test comment
- */
+// Create a test comment
 export const createTestComment = async (issueId: string, userId: string, content = 'Test comment') => {
   const comment = new Comment({
     content,
@@ -126,34 +118,26 @@ export const createTestComment = async (issueId: string, userId: string, content
   return comment;
 };
 
-/**
- * Get authorization header for a user
- */
+// Get authorization header for a user
 export const getAuthHeader = (token: string) => ({
   Authorization: `Bearer ${token}`
 });
 
-/**
- * Register a user via API
- */
+// Register a user via API
 export const registerUser = async (userData = testUsers.user1) => {
   return request(app)
     .post('/api/auth/register')
     .send(userData);
 };
 
-/**
- * Login a user via API
- */
+// Login a user via API
 export const loginUser = async (email: string, password: string) => {
   return request(app)
     .post('/api/auth/login')
     .send({ email, password });
 };
 
-/**
- * Create an issue via API
- */
+// Create an issue via API
 export const createIssueViaAPI = async (token: string, issueData?: any) => {
   const defaultIssueData = {
     title: 'API Test Issue',
@@ -167,9 +151,7 @@ export const createIssueViaAPI = async (token: string, issueData?: any) => {
     .send(issueData || defaultIssueData);
 };
 
-/**
- * Create a comment via API
- */
+// Create a comment via API
 export const createCommentViaAPI = async (token: string, issueId: string, content = 'Test comment via API') => {
   return request(app)
     .post(`/api/comments/issue/${issueId}`)
@@ -177,9 +159,7 @@ export const createCommentViaAPI = async (token: string, issueId: string, conten
     .send({ content });
 };
 
-/**
- * Upload a file via API (mock file)
- */
+// Upload a file via API (mock file)
 export const uploadFileViaAPI = async (token: string, issueId: string) => {
   return request(app)
     .post(`/api/files/issue/${issueId}/upload`)
@@ -187,23 +167,17 @@ export const uploadFileViaAPI = async (token: string, issueId: string) => {
     .attach('files', Buffer.from('test file content'), 'test.txt');
 };
 
-/**
- * Cleanup test data
- */
+// Cleanup test data
 export const cleanupTestData = async () => {
   await User.deleteMany({});
   await Issue.deleteMany({});
   await Comment.deleteMany({});
 };
 
-/**
- * Delay utility for testing async operations
- */
+// Delay utility for testing async operations
 export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-/**
- * Assert pagination response structure
- */
+// Assert pagination response structure
 export const assertPaginationStructure = (response: any) => {
   expect(response.body).toHaveProperty('success', true);
   expect(response.body).toHaveProperty('data');
@@ -216,9 +190,7 @@ export const assertPaginationStructure = (response: any) => {
   expect(response.body.pagination).toHaveProperty('hasPrev');
 };
 
-/**
- * Assert error response structure
- */
+// Assert error response structure
 export const assertErrorResponse = (response: any, expectedStatus: number) => {
   expect(response.status).toBe(expectedStatus);
   expect(response.body).toHaveProperty('success', false);
@@ -227,9 +199,7 @@ export const assertErrorResponse = (response: any, expectedStatus: number) => {
   expect(response.body.error).toHaveProperty('statusCode', expectedStatus);
 };
 
-/**
- * Assert success response structure
- */
+// Assert success response structure
 export const assertSuccessResponse = (response: any, expectedStatus = 200) => {
   expect(response.status).toBe(expectedStatus);
   expect(response.body).toHaveProperty('success', true);

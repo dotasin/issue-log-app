@@ -22,6 +22,8 @@ router.post('/issue/:issueId/upload',
   cleanupOnError,
   uploadFiles
 );
+// Validate file integrity for issue.
+// This route checks if the uploaded files are valid for the specified issue
 router.get('/issue/:issueId/validate', validateIssueIdParam, validateFileIntegrity);
 
 // Individual file routes

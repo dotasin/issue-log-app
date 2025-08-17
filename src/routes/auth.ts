@@ -7,6 +7,7 @@ import Joi from 'joi';
 const router = Router();
 
 //Public routes with rate limiting
+//Middlewre pattern composition of functions
 router.post('/register', authRateLimit(), validateRegister, register);
 router.post('/login', authRateLimit(), validateLogin, login);
 router.post('/refresh-token', authRateLimit(10, 15 * 60 * 1000), refreshToken);

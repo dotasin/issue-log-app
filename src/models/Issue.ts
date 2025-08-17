@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { IIssue } from '../types';
 import { logger } from '../utils/logger';
 
+// Generic factory patter for Issue model
 const issueSchema = new Schema<IIssue>(
   {
     title: {

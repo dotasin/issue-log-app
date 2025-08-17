@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { IComment } from '../types';
 import { logger } from '../utils/logger';
 
+// Generic factory pattern for Comment model
 const commentSchema = new Schema<IComment>(
   {
     content: {

@@ -206,6 +206,7 @@ export const refreshToken = asyncHandler(async (req: Request, res: Response, nex
     throw new AuthenticationError('Invalid refresh token');
   }
 
+  
   // Generate new tokens
   const newTokens = JWTUtils.generateTokens({
     userId: user._id,

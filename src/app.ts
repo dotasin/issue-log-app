@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 
-//Import utilities
+// Import utilities and middleware
 import { database } from './utils/database';
 import { logger, morganStream } from './utils/logger';
 import {
@@ -15,7 +15,7 @@ import {
   productionErrorHandler
 } from './middleware/errorHandler';
 
-//Import routes
+// Import routes 
 import authRoutes from './routes/auth';
 import issueRoutes from './routes/issues';
 import commentRoutes from './routes/comments';
@@ -36,25 +36,31 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
-// CORS configuration
+// CORS configuration 
+// Allows cross-origin requests from specified origins
+// This is useful for APIs that need to be accessed from different domains
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:4200'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // Request parsers
+// Parses incoming JSON requests and limits the body size to 10MB 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Logging
+// Uses morgan for logging HTTP requests in 'combined' format
 app.use(morgan('combined', { stream: morganStream }));
 
-// Serve static files
+// Serve static files 
+// Serves static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Health check
+// Simple endpoint to check if the API is running
 app.get('/health', (req, res) => {
   res.json({
     success: true,
@@ -125,9 +131,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(productionErrorHandler);
 }
 
-/**
- * Starts the Express server and connects to the database.
- */
+
+// Starts the Express server and connects to the database.
 const startServer = async () => {
   try {
     await database.connect();
@@ -141,9 +146,7 @@ const startServer = async () => {
   }
 };
 
-/**
- * Gracefully shut down the server.
- */
+// Gracefully shut down the server.
 const shutdown = async () => {
   logger.info('Gracefully shutting down...');
   await database.disconnect();

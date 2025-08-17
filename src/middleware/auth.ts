@@ -5,7 +5,8 @@ import { AuthRequest } from '../types';
 import { AuthenticationError, NotFoundError } from '../utils/errorTypes';
 import { logger } from  '../utils/logger';
 
-//Middleware to authenticate user using JWT token
+// Middleware to authenticate user using JWT token
+// This middleware checks for a valid JWT token in the Authorization header
 export const authenticate = async (
   req: AuthRequest,
   res: Response,
@@ -34,106 +35,6 @@ export const authenticate = async (
     next();
   } catch (error) {
     logger.error('Authentication error:', error);
-    next(error);
-  }
-};
-
-//Optional authentication middleware - doesn't throw error if no token
-export const optionalAuth = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const authHeader = req.headers.authorization;
-    const token = JWTUtils.extractTokenFromHeader(authHeader);
-
-    if (token) {
-      const payload = JWTUtils.verifyAccessToken(token);
-      const user = await User.findById(payload.userId);
-      if (user) {
-        req.user = user;
-      }
-    }
-
-    next();
-  } catch (error) {
-    // Log error but continue without authentication
-    logger.warn('Optional authentication failed:', error);
-    next();
-  }
-};
-
-//Middleware to check if user owns the resource
-export const checkOwnership = (resourceModel: any, resourceIdParam: string = 'id') => {
-  return async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      if (!req.user) {
-        throw new AuthenticationError('Authentication required');
-      }
-
-      const resourceId = req.params[resourceIdParam];
-      const resource = await resourceModel.findById(resourceId);
-
-      if (!resource) {
-        throw new NotFoundError('Resource');
-      }
-
-      // Check if user owns the resource (assumes resource has createdBy field)
-      if (resource.createdBy.toString() !== req.user._id.toString()) {
-        throw new AuthenticationError('Access denied - you can only access your own resources');
-      }
-
-      next();
-    } catch (error) {
-      next(error);
-    }
-  };
-};
-
-//Middleware to refresh expired tokens
-export const refreshTokenMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { refreshToken } = req.body;
-
-    if (!refreshToken) {
-      throw new AuthenticationError('Refresh token is required');
-    }
-
-    // Verify refresh token
-    const payload = JWTUtils.verifyRefreshToken(refreshToken);
-
-    // Find user
-    const user = await User.findById(payload.userId);
-    if (!user) {
-      throw new NotFoundError('User');
-    }
-
-    // Generate new tokens
-    const newTokens = JWTUtils.generateTokens({
-      userId: user._id,
-      email: user.email
-    });
-
-    res.json({
-      success: true,
-      message: 'Tokens refreshed successfully',
-      data: {
-        accessToken: newTokens.accessToken,
-        refreshToken: newTokens.refreshToken,
-        user: {
-          id: user._id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName
-        }
-      }
-    });
-  } catch (error) {
     next(error);
   }
 };

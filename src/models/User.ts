@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../types';
 
+// Generic factory pattern for User model
 const userSchema = new Schema<IUser>(
   {
     email: {

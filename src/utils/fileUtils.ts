@@ -4,7 +4,6 @@ import { promisify } from 'util';
 import { logger } from './logger';
 
 // Promisify fs methods for async/await usage
-const fsExists = promisify(fs.exists);
 const fsUnlink = promisify(fs.unlink);
 const fsStat = promisify(fs.stat);
 const fsMkdir = promisify(fs.mkdir);

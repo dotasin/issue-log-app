@@ -18,7 +18,9 @@ router.get('/recent', getRecentComments);
 router.get('/issue/:issueId', validateIssueIdParam, validateCommentQuery, getCommentsForIssue);
 router.post('/issue/:issueId', validateIssueIdParam, validateCreateComment, createComment);
 
-// Individual comment routes
+// Individual comment routes 
+// Validate ObjectId parameter for comment ID
+// This ensures that the ID is a valid MongoDB ObjectId before proceeding to the controller
 router.get('/:id', validateObjectIdParam, getCommentById);
 router.put('/:id', validateObjectIdParam, validateUpdateComment, updateComment);
 router.delete('/:id', validateObjectIdParam, deleteComment);

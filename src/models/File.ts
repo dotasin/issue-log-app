@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { logger } from '../utils/logger';
 
+// Generic factory pattern for File model
 const fileSchema = new Schema<IFile>(
   {
     filename: {

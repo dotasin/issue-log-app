@@ -87,6 +87,7 @@ export interface PaginationParams {
   skip: number;
 }
 
+// Generic paginated response structure
 export interface PaginatedResponse<T> {
   data: T[];
   pagination: {
@@ -99,7 +100,7 @@ export interface PaginatedResponse<T> {
   };
 }
 
-// Query types
+// Query parameters for issues
 export interface IssueQueryParams {
   status?: 'pending' | 'complete';
   priority?: 'low' | 'medium' | 'high';
@@ -110,7 +111,7 @@ export interface IssueQueryParams {
   limit?: string;
 }
 
-// JWT Payload
+// JWT Payload types 
 export interface JwtPayload {
   userId: string;
   email: string;
@@ -118,7 +119,7 @@ export interface JwtPayload {
   exp?: number;
 }
 
-// Error types
+// Error types 
 export interface CustomError extends Error {
   statusCode?: number;
   code?: string;
